@@ -1,0 +1,10 @@
+**
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!support/
+!support/apps/
+!support/apps/demo/
+!support/apps/demo/**
+**/node_modules
+**/__pycache__

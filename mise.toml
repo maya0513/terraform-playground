@@ -1,6 +1,8 @@
 [tools]
 terraform = "1.16.6"
 awscli = "2.38.1"
+node = "24.22.0"
+pnpm = "12.11.2"
 
 # このフォルダ内だけで使う、Moto専用のダミー設定です。
 [env]
@@ -22,37 +24,67 @@ AWS_CLI_AUTO_PROMPT = "off"
 AWS_MAX_ATTEMPTS = "1"
 CHECKPOINT_DISABLE = "1"
 
+[tasks."lesson:list"]
+description = "教材一覧を学ぶ順番に表示"
+dir = "{{config_root}}"
+run = "node scripts/course.ts list"
+
+[tasks."lesson:prepare"]
+description = "指定教材の初期化・Moto起動・デモアプリ準備"
+dir = "{{config_root}}"
+run = "node scripts/course.ts prepare"
+
+[tasks."lesson:plan"]
+description = "指定教材の変更予定を確認"
+dir = "{{config_root}}"
+run = "node scripts/course.ts plan"
+
+[tasks."lesson:apply"]
+description = "指定教材を構築（確認入力あり）"
+dir = "{{config_root}}"
+run = "node scripts/course.ts apply"
+
+[tasks."lesson:cleanup"]
+description = "指定教材の実習データと環境を片付ける（確認入力なし）"
+dir = "{{config_root}}"
+run = "node scripts/course.ts cleanup"
+
+[tasks."lesson:status"]
+description = "指定教材の管理対象とコンテナを確認"
+dir = "{{config_root}}"
+run = "node scripts/course.ts status"
+
 [tasks."moto:up"]
-description = "ローカルのAWSエミュレーターを起動"
-run = "docker compose up -d --wait"
+description = "基礎教材のMotoを起動"
+dir = "{{config_root}}"
+run = "node scripts/course.ts moto-up"
 
 [tasks."moto:down"]
-description = "Motoだけを停止・削除（通常の片付けはcleanupを使用）"
-run = "docker compose down"
+description = "基礎のMotoだけ停止（通常の片付けはcleanup）"
+dir = "{{config_root}}"
+run = "node scripts/course.ts moto-down"
 
 [tasks."moto:logs"]
-description = "エミュレーターのログを確認"
-run = "docker compose logs --tail=50 moto"
-
-[tasks.cleanup]
-description = "この教材のTerraform管理対象とMotoを片付ける（確認入力なし）"
+description = "基礎のMotoのログを確認"
 dir = "{{config_root}}"
-run = "bash scripts/cleanup.sh"
+run = "node scripts/course.ts moto-logs"
+
+[tasks."cleanup"]
+description = "全教材を片付ける（編集内容とイメージは残す）"
+dir = "{{config_root}}"
+run = "node scripts/course.ts cleanup-all"
 
 [tasks."cleanup:images"]
-description = "片付け後、この教材のMotoイメージも削除して容量を空ける"
+description = "全教材の片付け後、教材用イメージも削除"
 dir = "{{config_root}}"
-depends = ["cleanup"]
-run = "docker compose down --rmi all"
+run = "node scripts/course.ts cleanup-images"
 
-[tasks.check]
-description = "Terraformの書式と構文、Compose設定を確認"
-run = """
-set -eu
-docker compose config --quiet
-terraform fmt -check -recursive examples
-for example in local s3; do
-  terraform -chdir="examples/$example" init -input=false -lockfile=readonly
-  terraform -chdir="examples/$example" validate
-done
-"""
+[tasks."check"]
+description = "全教材のTerraformと文書を検証"
+dir = "{{config_root}}"
+run = "node scripts/course.ts check"
+
+[tasks."test:lessons"]
+description = "隔離した環境で基礎と6システムを順番に検証・後片付け"
+dir = "{{config_root}}"
+run = "node tests/test-course.ts"

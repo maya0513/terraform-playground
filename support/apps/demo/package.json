@@ -1,0 +1,24 @@
+{
+  "name": "@terraform-playground/demo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.1152.0",
+    "@aws-sdk/client-s3": "3.1152.0",
+    "@aws-sdk/client-sqs": "3.1152.0",
+    "@aws-sdk/lib-dynamodb": "3.1152.0",
+    "express": "5.3.0",
+    "multer": "2.4.0",
+    "pg": "8.23.1",
+    "redis": "6.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/multer": "2.3.0",
+    "@types/pg": "8.23.1"
+  },
+  "engines": {
+    "node": ">=24.22.0 <25"
+  }
+}

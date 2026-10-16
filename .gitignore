@@ -1,5 +1,6 @@
 # ツール・プロバイダーの作業用データ
 .mise/
+**/node_modules/
 **/.terraform/
 
 # Terraformが覚えている管理情報・実行時の生成物

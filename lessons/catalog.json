@@ -1,0 +1,62 @@
+{
+  "namespace": "terraform-playground",
+  "images": {
+    "moto": "motoserver/moto:5.2.4",
+    "nginx": "nginx:1.30.0-alpine",
+    "postgres": "postgres:17.6-alpine",
+    "redis": "redis:7.4.5-alpine",
+    "node": "node:24.22.0-bookworm-slim"
+  },
+  "lessons": {
+    "01-basics/01-local-files": {
+      "title": "基礎1・2：ローカルファイルとstate",
+      "code": "b01",
+      "kind": "local"
+    },
+    "01-basics/02-s3-storage": {
+      "title": "基礎3・4：S3と変数",
+      "code": "b02",
+      "kind": "aws-basic",
+      "moto_port": 5000
+    },
+    "02-docker-systems/01-static-site": {
+      "title": "Docker 1：静的サイト",
+      "code": "d01",
+      "kind": "static",
+      "port": 8101
+    },
+    "02-docker-systems/02-web-database": {
+      "title": "Docker 2：Webとデータベース",
+      "code": "d02",
+      "kind": "notes",
+      "port": 8102
+    },
+    "02-docker-systems/03-background-jobs": {
+      "title": "Docker 3：バックグラウンド処理",
+      "code": "d03",
+      "kind": "notes-jobs",
+      "port": 8103
+    },
+    "03-aws-systems/01-object-storage": {
+      "title": "AWS 1：ファイル置き場",
+      "code": "a01",
+      "kind": "files",
+      "port": 8201,
+      "moto_port": 5101
+    },
+    "03-aws-systems/02-database-storage": {
+      "title": "AWS 2：ファイルとメタデータ",
+      "code": "a02",
+      "kind": "files-db",
+      "port": 8202,
+      "moto_port": 5102
+    },
+    "03-aws-systems/03-queue-worker": {
+      "title": "AWS 3：キューとワーカー",
+      "code": "a03",
+      "kind": "files-jobs",
+      "port": 8203,
+      "moto_port": 5103
+    }
+  }
+}
