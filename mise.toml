@@ -1,0 +1,58 @@
+[tools]
+terraform = "1.16.6"
+awscli = "2.38.1"
+
+# このフォルダ内だけで使う、Moto専用のダミー設定です。
+[env]
+AWS_ACCESS_KEY_ID = "test"
+AWS_SECRET_ACCESS_KEY = "test"
+AWS_SESSION_TOKEN = "test"
+AWS_REGION = "us-east-1"
+AWS_DEFAULT_REGION = "us-east-1"
+AWS_ENDPOINT_URL = "http://localhost:5000"
+AWS_ENDPOINT_URL_S3 = "http://localhost:5000"
+AWS_ENDPOINT_URL_STS = "http://localhost:5000"
+AWS_CONFIG_FILE = "/dev/null"
+AWS_SHARED_CREDENTIALS_FILE = "/dev/null"
+AWS_PROFILE = false
+AWS_DEFAULT_PROFILE = false
+AWS_EC2_METADATA_DISABLED = "true"
+AWS_PAGER = ""
+AWS_CLI_AUTO_PROMPT = "off"
+AWS_MAX_ATTEMPTS = "1"
+CHECKPOINT_DISABLE = "1"
+
+[tasks."moto:up"]
+description = "ローカルのAWSエミュレーターを起動"
+run = "docker compose up -d --wait"
+
+[tasks."moto:down"]
+description = "Motoだけを停止・削除（通常の片付けはcleanupを使用）"
+run = "docker compose down"
+
+[tasks."moto:logs"]
+description = "エミュレーターのログを確認"
+run = "docker compose logs --tail=50 moto"
+
+[tasks.cleanup]
+description = "この教材のTerraform管理対象とMotoを片付ける（確認入力なし）"
+dir = "{{config_root}}"
+run = "bash scripts/cleanup.sh"
+
+[tasks."cleanup:images"]
+description = "片付け後、この教材のMotoイメージも削除して容量を空ける"
+dir = "{{config_root}}"
+depends = ["cleanup"]
+run = "docker compose down --rmi all"
+
+[tasks.check]
+description = "Terraformの書式と構文、Compose設定を確認"
+run = """
+set -eu
+docker compose config --quiet
+terraform fmt -check -recursive examples
+for example in local s3; do
+  terraform -chdir="examples/$example" init -input=false -lockfile=readonly
+  terraform -chdir="examples/$example" validate
+done
+"""

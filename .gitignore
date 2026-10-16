@@ -1,0 +1,16 @@
+# ツール・プロバイダーの作業用データ
+.mise/
+**/.terraform/
+
+# Terraformが覚えている管理情報・実行時の生成物
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+**/generated/
+
+# 実習中にコピーして編集する入力値
+*.auto.tfvars
+
+# .terraform.lock.hcl は除外せず、バージョンを再現するため残します。

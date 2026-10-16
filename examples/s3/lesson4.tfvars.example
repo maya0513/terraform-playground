@@ -1,0 +1,6 @@
+# このファイル自体は自動では読み込まれません。
+# lesson4.auto.tfvars という名前にコピーして使います。
+extra_files = {
+  "notes.txt" = "Terraformの変数から作りました。\n"
+  "links.txt" = "https://www.terraform.io/\n"
+}
